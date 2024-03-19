@@ -1,0 +1,28 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.JsonEncoder"/>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder name="STDOUT" class="net.logstash.logback.encoder.LogstashEncoder">
+            <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                <valueMask>
+                    <value>(?i)(\s*)(|"|')(name|phoneNumber|race|gender|birthdate|geodata)(|"|')(\s*)(:|=)(\s*)('|"|\s*)(\s*)(^$|.*?)(\s*)('|,|"|\))</value>
+                    <mask>$1$2$3$4$5$6$7$8$9*******$11$12</mask>
+                </valueMask>
+                <valueMask>
+                    <value>(?i)([a-zA-Z0-9. _%+-])[a-zA-Z0-9. _%+-]*@([a-zA-Z0-9. _%+-])[a-zA-Z0-9. _%+-]*\.([a-zA-Z0-9. _%+-])[a-zA-Z0-9. _%+-]*</value>
+                    <mask>$1******@$2******.$3**</mask>
+                </valueMask>
+                <valueMask>
+                    <value>(\d+\.\d+\.\d+\.\d+)</value>
+                    <mask>***.***.*.*</mask>
+                </valueMask>
+            </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
